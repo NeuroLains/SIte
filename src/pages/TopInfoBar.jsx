@@ -24,8 +24,8 @@ function QuickOrderModal({ open, onClose }) {
       data.append('phone', form.phone);
       data.append('email', form.email);
       data.append('message', form.desc);
-      if (form.files && form.files[0]) {
-        data.append('file', form.files[0]);
+      if (form.files && form.files.length > 0) {
+        form.files.forEach(f => data.append('files', f));
       }
       const res = await fetch('http://localhost:3001/api/quick-order', {
         method: 'POST',
@@ -57,7 +57,7 @@ function QuickOrderModal({ open, onClose }) {
               <input name="email" placeholder="Электронная почта" value={form.email} onChange={handleChange} required style={{width:'100%',marginBottom:8}} />
             </div>
             <div style={{flex:1, minWidth:200}}>
-              <input type="file" onChange={handleFile} style={{width:'100%',marginBottom:8}} />
+              <input type="file" name="files" multiple onChange={handleFile} style={{width:'100%',marginBottom:8}} />
             </div>
           </div>
           <textarea name="desc" placeholder="Описание заявки на печать" value={form.desc} onChange={handleChange} style={{width:'100%',margin:'8px 0'}} rows={3} />
