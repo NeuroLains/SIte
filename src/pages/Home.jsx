@@ -26,23 +26,26 @@ import work2 from '../assets/gallery/photo2.jpg';
 import work3 from '../assets/gallery/photo3.jpg';
 import work4 from '../assets/gallery/komissia1.jpg';
 
+import photo1 from '../assets/gallery/photo1.jpg';
+import photo2 from '../assets/gallery/photo2.jpg';
+import photo3 from '../assets/gallery/photo3.jpg';
+
 const services = [
-  { title: 'Визитки', price: 'от 0.95 ₽ за шт.', icon: CardIcon, desc: 'Печать визиток любых форматов, материалов и тиражей. Офсет, цифра, дизайнерские, пластиковые, металлические.' },
-  { title: 'Листовки', price: 'от 2.2 ₽ за шт.', icon: LeafletIcon, desc: 'Цветные и черно-белые листовки любых форматов. Оперативная печать, разные виды бумаги.' },
-  { title: 'Буклеты', price: 'от 4.1 ₽ за шт.', icon: BookletIcon, desc: 'Буклеты, каталоги, рекламные материалы. Складывание, фальцовка, любые форматы.' },
-  { title: 'Афиши', price: 'от 7.8 ₽ за шт.', icon: PosterIcon, desc: 'Печать афиш и плакатов для мероприятий, рекламы, объявлений.' },
-  { title: 'Флаеры', price: 'от 1.4 ₽ за шт.', icon: FlyerIcon, desc: 'Флаеры для акций, рекламы, событий. Ярко, быстро, недорого.' },
-  { title: 'Наклейки', price: 'от 4.0 ₽ за шт.', icon: StickerIcon, desc: 'Печать наклеек любых форм и размеров. Самоклейка, винил, пленка.' },
-  { title: 'Значки', price: 'от 25 ₽ за шт.', icon: BadgeIcon, desc: 'Закатные значки с вашим дизайном. Разные размеры, быстрая печать.' },
-  { title: 'Футболки', price: 'от 200 ₽', icon: TshirtIcon, desc: 'Печать на футболках, толстовках, спецодежде. Сувенирная и корпоративная одежда.' },
-  { title: 'Кружки', price: 'от 250 ₽', icon: MugIcon, desc: 'Печать на кружках, термокружках, сувенирной посуде.' },
-  { title: 'Дизайн', price: 'от 100 ₽', icon: DesignIcon, desc: 'Разработка макетов, корректировка, фирменный стиль, дизайн-проекты.' },
-  { title: 'Календари', price: 'от 3 ₽ за шт.', icon: CalendarIcon, desc: 'Квартальные, настольные, карманные календари. Офсет, цифра, индивидуальный дизайн.' },
-  { title: 'Блокноты', price: 'от 21 ₽ за шт.', icon: NotebookIcon, desc: 'Блокноты, тетради, записные книжки с логотипом. Любые форматы и тиражи.' },
-  { title: 'Ручки', price: 'от 15 ₽ за шт.', icon: PenIcon, desc: 'Печать на ручках, сувенирная продукция для бизнеса и мероприятий.' },
-  { title: 'Розничные услуги', price: 'от 10 ₽', icon: StickerIcon, desc: 'Ксерокопия, распечатка, сканирование, ламинация, брошюровка, переплет, услуги для частных лиц.' },
-  { title: 'Плакаты', price: 'от 15 ₽ за шт.', icon: PosterIcon, desc: 'Печать плакатов любых форматов для рекламы, мероприятий, оформления интерьера. Яркие цвета, качественная бумага, быстрая печать. Возможна ламинация и индивидуальный дизайн.' },
-  { title: 'Папки', price: 'от 28 ₽ за шт.', icon: FolderIcon, desc: 'Фирменные папки для документов с логотипом вашей компании. Картон, ламинация, полноцветная печать, индивидуальный дизайн. Отлично подходят для презентаций и деловых встреч.' },
+  { title: 'Визитки', price: 95, oldPrice: 120, discount: 21, icon: CardIcon, image: photo1, rating: 4.9, reviews: 120 },
+  { title: 'Листовки', price: 220, oldPrice: 250, discount: 12, icon: LeafletIcon, image: photo2, rating: 4.8, reviews: 80 },
+  { title: 'Буклеты', price: 410, oldPrice: 500, discount: 18, icon: BookletIcon, image: photo3, rating: 4.7, reviews: 60 },
+  { title: 'Афиши', price: 78, oldPrice: 100, discount: 22, icon: PosterIcon, image: photo1, rating: 4.6, reviews: 45 },
+  { title: 'Флаеры', price: 140, oldPrice: 180, discount: 22, icon: FlyerIcon, image: photo2, rating: 4.8, reviews: 70 },
+  { title: 'Наклейки', price: 400, oldPrice: 500, discount: 20, icon: StickerIcon, image: photo3, rating: 4.9, reviews: 90 },
+  { title: 'Значки', price: 25, oldPrice: 35, discount: 29, icon: BadgeIcon, image: photo1, rating: 4.9, reviews: 110 },
+  { title: 'Футболки', price: 200, oldPrice: 250, discount: 20, icon: TshirtIcon, image: photo2, rating: 4.7, reviews: 55 },
+  { title: 'Кружки', price: 250, oldPrice: 300, discount: 17, icon: MugIcon, image: photo3, rating: 4.8, reviews: 75 },
+  { title: 'Дизайн', price: 100, oldPrice: 120, discount: 17, icon: DesignIcon, image: photo1, rating: 4.9, reviews: 60 },
+  { title: 'Календари', price: 300, oldPrice: 350, discount: 14, icon: CalendarIcon, image: photo2, rating: 4.8, reviews: 50 },
+  { title: 'Блокноты', price: 1050, oldPrice: 1200, discount: 13, icon: NotebookIcon, image: photo3, rating: 4.7, reviews: 40 },
+  { title: 'Ручки', price: 15, oldPrice: 20, discount: 25, icon: PenIcon, image: photo1, rating: 4.8, reviews: 100 },
+  { title: 'Плакаты', price: 78, oldPrice: 100, discount: 22, icon: PosterIcon, image: photo2, rating: 4.6, reviews: 30 },
+  { title: 'Папки', price: 1400, oldPrice: 1600, discount: 13, icon: FolderIcon, image: photo3, rating: 4.7, reviews: 25 }
 ];
 
 const sliderContent = [
@@ -106,12 +109,58 @@ function Home() {
       </div>
       <div style={{ padding: '32px 0', textAlign: 'center' }}>
         <h2 style={{ color: '#2196f3', margin: '32px 0 16px', fontWeight: 700, letterSpacing: 1 }}>Наша продукция</h2>
-        <div className="catalog-grid">
-          {services.map((s, i) => (
-            <div className="catalog-card" key={i} onClick={() => setModal(s)} style={{ cursor: 'pointer' }}>
-              <img src={s.icon} alt={s.title} className="catalog-icons" />
-              <div className="catalog-title">{s.title}</div>
-              <div className="catalog-price">{s.price}</div>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+          gap: '32px',
+          margin: '40px 0',
+          padding: '0 24px',
+          maxWidth: 1200,
+          marginLeft: 'auto',
+          marginRight: 'auto'
+        }}>
+          {services.map((service, idx) => (
+            <div key={idx} style={{
+              background: '#fff',
+              borderRadius: '18px',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.10)',
+              overflow: 'hidden',
+              display: 'flex',
+              flexDirection: 'column',
+              position: 'relative',
+              transition: 'box-shadow 0.3s',
+              minHeight: 420
+            }}>
+              <img src={service.image} alt={service.title} style={{ width: '100%', height: 180, objectFit: 'cover' }} />
+              <div style={{ padding: '20px 18px 12px 18px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                <div style={{ display: 'flex', alignItems: 'center', marginBottom: 8 }}>
+                  <span style={{ color: '#43d854', fontWeight: 700, fontSize: 22, marginRight: 8 }}>{service.price} ₽</span>
+                  <span style={{ color: '#888', textDecoration: 'line-through', fontSize: 15, marginRight: 8 }}>{service.oldPrice} ₽</span>
+                  <span style={{ color: '#f44336', fontWeight: 600, fontSize: 15 }}>–{service.discount}%</span>
+                </div>
+                <div style={{ fontWeight: 600, fontSize: 18, marginBottom: 8, display:'flex', alignItems:'center' }}>
+                  <img src={service.icon} alt="icon" style={{width:28, height:28, marginRight:8, opacity:0.7}} />
+                  {service.title}
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', fontSize: 15, color: '#888' }}>
+                  <span style={{ color: '#ffb400', fontSize: 18, marginRight: 4 }}>★</span>
+                  <span style={{ fontWeight: 600, marginRight: 6 }}>{service.rating}</span>
+                  <span style={{ color: '#888' }}>{service.reviews} отзывов</span>
+                </div>
+              </div>
+              <button style={{
+                background: '#2196f3',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '0 0 18px 18px',
+                fontWeight: 600,
+                fontSize: 16,
+                padding: '14px 0',
+                cursor: 'pointer',
+                width: '100%',
+                transition: 'background 0.2s',
+                marginTop: 'auto'
+              }}>В корзину</button>
             </div>
           ))}
         </div>

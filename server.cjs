@@ -29,7 +29,9 @@ app.get('/api/test-email', async (req, res) => {
       auth: {
         user: 'mr.dobriy@list.ru',
         pass: 'dsiUCWFzRwBQb5YbrOeJ'
-      }
+      },
+      debug: true,
+      logger: true
     });
     await transporter.verify();
     const mailOptions = {
@@ -70,6 +72,8 @@ app.post('/api/quick-order', upload.any(), async (req, res) => {
         user: 'mr.dobriy@list.ru',
         pass: 'dsiUCWFzRwBQb5YbrOeJ'
       },
+      debug: true,
+      logger: true,
       tls: {
         rejectUnauthorized: false
       }
