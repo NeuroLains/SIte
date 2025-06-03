@@ -13,6 +13,7 @@ import CalendarIcon from '../assets/icons/calendar.svg';
 import NotebookIcon from '../assets/icons/notebook.svg';
 import PenIcon from '../assets/icons/tag.svg';
 import FolderIcon from '../assets/icons/folder.svg';
+import ProductCard from '../components/ProductCard';
 
 // Импортируем изображения для слайдера
 import slider1 from '../assets/gallery/1.jpg';
@@ -120,48 +121,15 @@ function Home() {
           marginRight: 'auto'
         }}>
           {services.map((service, idx) => (
-            <div key={idx} style={{
-              background: '#fff',
-              borderRadius: '18px',
-              boxShadow: '0 4px 20px rgba(0,0,0,0.10)',
-              overflow: 'hidden',
-              display: 'flex',
-              flexDirection: 'column',
-              position: 'relative',
-              transition: 'box-shadow 0.3s',
-              minHeight: 420
-            }}>
-              <img src={service.image} alt={service.title} style={{ width: '100%', height: 180, objectFit: 'cover' }} />
-              <div style={{ padding: '20px 18px 12px 18px', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                <div style={{ display: 'flex', alignItems: 'center', marginBottom: 8 }}>
-                  <span style={{ color: '#43d854', fontWeight: 700, fontSize: 22, marginRight: 8 }}>{service.price} ₽</span>
-                  <span style={{ color: '#888', textDecoration: 'line-through', fontSize: 15, marginRight: 8 }}>{service.oldPrice} ₽</span>
-                  <span style={{ color: '#f44336', fontWeight: 600, fontSize: 15 }}>–{service.discount}%</span>
-                </div>
-                <div style={{ fontWeight: 600, fontSize: 18, marginBottom: 8, display:'flex', alignItems:'center' }}>
-                  <img src={service.icon} alt="icon" style={{width:28, height:28, marginRight:8, opacity:0.7}} />
-                  {service.title}
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', fontSize: 15, color: '#888' }}>
-                  <span style={{ color: '#ffb400', fontSize: 18, marginRight: 4 }}>★</span>
-                  <span style={{ fontWeight: 600, marginRight: 6 }}>{service.rating}</span>
-                  <span style={{ color: '#888' }}>{service.reviews} отзывов</span>
-                </div>
-              </div>
-              <button style={{
-                background: '#2196f3',
-                color: '#fff',
-                border: 'none',
-                borderRadius: '0 0 18px 18px',
-                fontWeight: 600,
-                fontSize: 16,
-                padding: '14px 0',
-                cursor: 'pointer',
-                width: '100%',
-                transition: 'background 0.2s',
-                marginTop: 'auto'
-              }}>В корзину</button>
-            </div>
+            <ProductCard
+              key={idx}
+              to={`/product/${idx}`}
+              image={service.image}
+              title={service.title}
+              price={service.price}
+              oldPrice={service.oldPrice}
+              discount={service.discount}
+            />
           ))}
         </div>
         {/* Модальное окно услуги */}

@@ -129,83 +129,119 @@ export default function TopInfoBar() {
             </button>
             {catalogOpen && (
               <div className="catalog-dropdown">
+                {/* Полиграфия */}
                 <div className="catalog-menu-item">
                   <i className="fas fa-print"></i>
-                  <Link to="/printing" style={{flex:1, textDecoration:'none', color:'inherit'}}>Полиграфия</Link>
+                  <Link to="/polygraphy" style={{flex:1, textDecoration:'none', color:'inherit'}}>Полиграфия</Link>
                   <span className="arrow-icon">›</span>
                   <div className="catalog-submenu">
                     <div className="submenu-section">
-                      <Link to="/printing/business-cards" className="submenu-title">Визитки</Link>
-                      <div className="submenu-links">
-                        <Link to="/printing/business-cards/standard" className="submenu-link">Стандартные визитки</Link>
-                        <Link to="/printing/business-cards/premium" className="submenu-link">Премиум визитки</Link>
-                        <Link to="/printing/business-cards/plastic" className="submenu-link">Пластиковые карты</Link>
-                      </div>
+                      <Link to="/polygraphy/business-cards" className="submenu-title">Визитки</Link>
                     </div>
                     <div className="submenu-section">
-                      <Link to="/printing/marketing" className="submenu-title">Рекламная полиграфия</Link>
-                      <div className="submenu-links">
-                        <Link to="/printing/marketing/flyers" className="submenu-link">Листовки</Link>
-                        <Link to="/printing/marketing/booklets" className="submenu-link">Буклеты</Link>
-                        <Link to="/printing/marketing/posters" className="submenu-link">Афиши</Link>
-                        <Link to="/printing/marketing/catalogs" className="submenu-link">Каталоги</Link>
-                      </div>
+                      <Link to="/polygraphy/flyers" className="submenu-title">Листовки</Link>
+                    </div>
+                    <div className="submenu-section">
+                      <Link to="/polygraphy/booklets" className="submenu-title">Буклеты</Link>
+                    </div>
+                    <div className="submenu-section">
+                      <Link to="/polygraphy/notebooks" className="submenu-title">Блокноты</Link>
+                    </div>
+                    <div className="submenu-section">
+                      <Link to="/polygraphy/envelopes" className="submenu-title">Конверты</Link>
+                    </div>
+                    <div className="submenu-section">
+                      <Link to="/polygraphy/brochures" className="submenu-title">Брошюры</Link>
+                    </div>
+                    <div className="submenu-section">
+                      <Link to="/polygraphy/posters" className="submenu-title">Плакаты</Link>
+                    </div>
+                    <div className="submenu-section">
+                      <Link to="/polygraphy/drawings" className="submenu-title">Чертежи</Link>
+                    </div>
+                    <div className="submenu-section">
+                      <Link to="/polygraphy/photo-print" className="submenu-title">Печать Фото</Link>
+                    </div>
+                    <div className="submenu-section">
+                      <Link to="/polygraphy/calendars" className="submenu-title">Календари</Link>
+                    </div>
+                    <div className="submenu-section">
+                      <Link to="/polygraphy/stickers" className="submenu-title">Наклейки</Link>
+                    </div>
+                    <div className="submenu-section">
+                      <Link to="/polygraphy/labels" className="submenu-title">Стикеры</Link>
+                    </div>
+                    <div className="submenu-section">
+                      <Link to="/polygraphy/plastic-cards" className="submenu-title">Пластиковые Карты</Link>
+                    </div>
+                    <div className="submenu-section">
+                      <Link to="/polygraphy/risograph" className="submenu-title">Ризография</Link>
+                    </div>
+                    <div className="submenu-section">
+                      <Link to="/polygraphy/forms" className="submenu-title">Бланки</Link>
+                    </div>
+                    <div className="submenu-section">
+                      <Link to="/polygraphy/carbonless-forms" className="submenu-title">Самокопирующиеся Бланки</Link>
                     </div>
                   </div>
                 </div>
+                {/* Сувенирная продукция */}
                 <div className="catalog-menu-item">
                   <i className="fas fa-gift"></i>
-                  <Link to="/souvenirs" style={{flex:1, textDecoration:'none', color:'inherit'}}>Сувениры</Link>
+                  <Link to="/souvenirs" style={{flex:1, textDecoration:'none', color:'inherit'}}>Сувенирная продукция</Link>
                   <span className="arrow-icon">›</span>
                   <div className="catalog-submenu">
-                    <div className="submenu-section">
-                      <Link to="/souvenirs/office" className="submenu-title">Офисные сувениры</Link>
-                      <div className="submenu-links">
-                        <Link to="/souvenirs/office/pens" className="submenu-link">Ручки</Link>
-                        <Link to="/souvenirs/office/notebooks" className="submenu-link">Блокноты</Link>
-                        <Link to="/souvenirs/office/calendars" className="submenu-link">Календари</Link>
-                      </div>
-                    </div>
-                    <div className="submenu-section">
-                      <Link to="/souvenirs/personal" className="submenu-title">Личные сувениры</Link>
-                      <div className="submenu-links">
-                        <Link to="/souvenirs/personal/mugs" className="submenu-link">Кружки</Link>
-                        <Link to="/souvenirs/personal/tshirts" className="submenu-link">Футболки</Link>
-                        <Link to="/souvenirs/personal/caps" className="submenu-link">Кепки</Link>
-                      </div>
-                    </div>
+                    <div className="submenu-section"><Link to="/souvenirs/badges" className="submenu-title">Значки</Link></div>
+                    <div className="submenu-section"><Link to="/souvenirs/3d-stickers" className="submenu-title">3Д Стикеры</Link></div>
+                    <div className="submenu-section"><Link to="/souvenirs/chocolate" className="submenu-title">Шоколадки</Link></div>
+                    <div className="submenu-section"><Link to="/souvenirs/mugs" className="submenu-title">Кружки</Link></div>
+                    <div className="submenu-section"><Link to="/souvenirs/tshirts" className="submenu-title">Футболки</Link></div>
+                    <div className="submenu-section"><Link to="/souvenirs/caps" className="submenu-title">Бейсболки</Link></div>
+                    <div className="submenu-section"><Link to="/souvenirs/magnets" className="submenu-title">Магниты</Link></div>
+                    <div className="submenu-section"><Link to="/souvenirs/keychains" className="submenu-title">Брелоки</Link></div>
+                    <div className="submenu-section"><Link to="/souvenirs/plates" className="submenu-title">Шильды</Link></div>
+                    <div className="submenu-section"><Link to="/souvenirs/metal-print" className="submenu-title">Печать на металле</Link></div>
+                    <div className="submenu-section"><Link to="/souvenirs/bags" className="submenu-title">Сумки</Link></div>
+                    <div className="submenu-section"><Link to="/souvenirs/backpacks" className="submenu-title">Рюкзаки</Link></div>
+                    <div className="submenu-section"><Link to="/souvenirs/puzzles" className="submenu-title">Пазлы</Link></div>
+                    <div className="submenu-section"><Link to="/souvenirs/mats" className="submenu-title">Коврики</Link></div>
+                    <div className="submenu-section"><Link to="/souvenirs/ribbons" className="submenu-title">Ленты</Link></div>
+                    <div className="submenu-section"><Link to="/souvenirs/flags" className="submenu-title">Флаги</Link></div>
                   </div>
                 </div>
+                {/* Рекламные конструкции */}
                 <div className="catalog-menu-item">
-                  <i className="fas fa-file-alt"></i>
-                  <Link to="/blanks" style={{flex:1, textDecoration:'none', color:'inherit'}}>Бланки</Link>
+                  <i className="fas fa-building"></i>
+                  <Link to="/advert" style={{flex:1, textDecoration:'none', color:'inherit'}}>Рекламные конструкции</Link>
                   <span className="arrow-icon">›</span>
                   <div className="catalog-submenu">
-                    <div className="submenu-section">
-                      <Link to="/blanks/documents" className="submenu-title">Документы</Link>
-                      <div className="submenu-links">
-                        <Link to="/blanks/documents/forms" className="submenu-link">Формы документов</Link>
-                        <Link to="/blanks/documents/certificates" className="submenu-link">Сертификаты</Link>
-                        <Link to="/blanks/documents/diplomas" className="submenu-link">Дипломы</Link>
-                      </div>
-                    </div>
+                    <div className="submenu-section"><Link to="/advert/banners" className="submenu-title">Баннеры</Link></div>
+                    <div className="submenu-section"><Link to="/advert/stands" className="submenu-title">Стенды</Link></div>
+                    <div className="submenu-section"><Link to="/advert/plates" className="submenu-title">Таблички</Link></div>
+                    <div className="submenu-section"><Link to="/advert/rollup" className="submenu-title">Roll UP</Link></div>
+                    <div className="submenu-section"><Link to="/advert/presswall" className="submenu-title">Press Wall</Link></div>
+                    <div className="submenu-section"><Link to="/advert/x-stands" className="submenu-title">Х – образные стойки</Link></div>
+                    <div className="submenu-section"><Link to="/advert/payment-plates" className="submenu-title">Таблички для оплаты</Link></div>
+                    <div className="submenu-section"><Link to="/advert/address-plates" className="submenu-title">Адресные Таблички</Link></div>
+                    <div className="submenu-section"><Link to="/advert/plotter-cut" className="submenu-title">Плоттерная Резка</Link></div>
                   </div>
                 </div>
+                {/* Услуги */}
                 <div className="catalog-menu-item">
-                  <i className="fas fa-id-badge"></i>
-                  <Link to="/badges" style={{flex:1, textDecoration:'none', color:'inherit'}}>Закатные значки</Link>
+                  <i className="fas fa-tools"></i>
+                  <Link to="/services" style={{flex:1, textDecoration:'none', color:'inherit'}}>Услуги</Link>
                   <span className="arrow-icon">›</span>
                   <div className="catalog-submenu">
-                    <div className="submenu-section">
-                      <Link to="/badges/types" className="submenu-title">Виды значков</Link>
-                      <div className="submenu-links">
-                        <Link to="/badges/types/round" className="submenu-link">Круглые значки</Link>
-                        <Link to="/badges/types/square" className="submenu-link">Квадратные значки</Link>
-                        <Link to="/badges/types/custom" className="submenu-link">Значки с дизайном</Link>
-                      </div>
-                    </div>
+                    <div className="submenu-section"><Link to="/services/design" className="submenu-title">Разработка макетов</Link></div>
+                    <div className="submenu-section"><Link to="/services/lamination" className="submenu-title">Ламинирование</Link></div>
+                    <div className="submenu-section"><Link to="/services/binding" className="submenu-title">Брошюровка</Link></div>
+                    <div className="submenu-section"><Link to="/services/stapling" className="submenu-title">Степлирование</Link></div>
+                    <div className="submenu-section"><Link to="/services/hardcover" className="submenu-title">Твердый Переплет</Link></div>
+                    <div className="submenu-section"><Link to="/services/stamps" className="submenu-title">Изготовление Печатей</Link></div>
+                    <div className="submenu-section"><Link to="/services/branding" className="submenu-title">Брендирование</Link></div>
                   </div>
                 </div>
+                {/* Контакты */}
                 <div className="catalog-menu-item">
                   <i className="fas fa-address-book"></i>
                   <Link to="/contacts" style={{flex:1, textDecoration:'none', color:'inherit'}}>Контакты</Link>
@@ -229,12 +265,12 @@ export default function TopInfoBar() {
             </svg>
             <span style={{color:'#fff', fontWeight:500, fontSize:17}}>+7 952 774-33-33</span>
           </span>
-          <span style={{display:'flex', alignItems:'center', gap:6}}>
+            <span style={{display:'flex', alignItems:'center', gap:6}}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style={{width:22, height:22}}>
               <path d="M20 4H4c-1.103 0-2 .897-2 2v12c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V6c0-1.103-.897-2-2-2zm0 2v.511l-8 6.223-8-6.222V6h16zM4 18V9.044l7.386 5.745a.994.994 0 0 0 1.228 0L20 9.044 20.002 18H4z" fill="#fff"/>
             </svg>
             <a href="mailto:eis-admin@bk.ru" style={{color:'#fff', fontWeight:500, fontSize:17, textDecoration:'none'}}>eis-admin@bk.ru</a>
-          </span>
+            </span>
           <div className="header-socials" style={{gap:8}}>
             <a href="https://vk.com/kolibriya_nn" target="_blank" rel="noopener noreferrer" className="header-social-icon vk" title="ВКонтакте" style={{background:'#fff2', color:'#fff'}}>
               <svg viewBox="0 0 24 24" fill="currentColor" style={{width:28, height:28}}><path d="M12.01 17.5c-4.7 0-7.41-3.23-7.52-8.66h2.53c.07 3.89 1.78 5.52 3.13 5.82V8.84h2.27v2.7c1.33-.14 2.73-1.68 3.2-2.7h2.27c-.36 1.6-1.82 3.14-2.89 3.7 1.07.41 2.68 1.7 3.32 3.96h-2.6c-.41-1.23-1.43-2.36-3.19-2.5v2.5h-.01v.01z"/></svg>
@@ -243,11 +279,11 @@ export default function TopInfoBar() {
               <svg width="24" height="24" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M14 6.5c-4.14 0-7.5 2.93-7.5 6.54 0 1.24.44 2.41 1.19 3.41L6 22l5.01-1.63c.95.3 1.97.47 2.99.47 4.14 0 7.5-2.93 7.5-6.54S18.14 6.5 14 6.5Z" stroke="#fff" strokeWidth="2" fill="none"/>
                 <path d="M18.1 16.1c-.23-.11-1.36-.67-1.57-.74-.21-.08-.36-.12-.5.13-.14.25-.57.82-.7.99-.13.17-.25.19-.47.08-.22-.11-.93-.34-1.77-1.13-.67-.6-1.13-1.34-1.27-1.56-.13-.22-.01-.34.1-.45.1-.1.23-.27.34-.41.11-.14.15-.25.23-.41.08-.16.04-.3-.02-.41-.07-.12-.54-1.29-.74-1.76-.2-.47-.4-.41-.54-.42-.14-.01-.3-.01-.46-.01-.16 0-.41.07-.63.34-.22.27-.87.98-.87 2.37 0 1.39 1.02 2.74 1.16 2.93.14.19 2.01 3.07 4.89 4.18.68.29 1.22.47 1.63.6.68.22 1.3.19 1.78.12.54-.08 1.65-.68 1.89-1.34.24-.66.24-1.23.17-1.34-.07-.11-.26-.19-.54-.32Z" fill="#fff"/>
-              </svg>
-            </a>
+                </svg>
+              </a>
             <a href="https://t.me/+79527743333" target="_blank" rel="noopener noreferrer" className="header-social-icon telegram" title="Telegram" style={{background:'#fff2', color:'#fff'}}>
               <svg viewBox="0 0 24 24" fill="currentColor" style={{width:24, height:24}}><path d="M9.04 16.62l-.39 3.47c.56 0 .8-.24 1.09-.53l2.62-2.49 5.44 3.97c1 .55 1.72.26 1.97-.92l3.58-16.7c.33-1.53-.56-2.13-1.53-1.77L2.2 9.3c-1.5.6-1.48 1.45-.27 1.84l4.6 1.44 10.7-6.74c.5-.33.96-.15.58.21z"/></svg>
-            </a>
+              </a>
           </div>
           <div style={{color:'#fff', fontWeight:500, fontSize:17, marginLeft:8, whiteSpace:'nowrap'}}>Пн–Пт 9:00–18:00</div>
           <button 

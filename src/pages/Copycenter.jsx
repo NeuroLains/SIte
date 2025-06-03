@@ -201,7 +201,7 @@ function Copycenter() {
               }} />
             </div>
             
-            <div style={{
+            <div style={{ 
               padding: '24px',
               flex: 1,
               display: 'flex',
@@ -265,8 +265,8 @@ function Copycenter() {
                 borderRadius: '8px',
                 padding: '16px',
                 marginBottom: '24px'
-              }}>
-                {service.prices.map((price, idx) => (
+            }}>
+              {service.prices.map((price, idx) => (
                   <div key={idx} style={{
                     display: 'flex',
                     justifyContent: 'space-between',
@@ -277,8 +277,8 @@ function Copycenter() {
                     <span>{price.count}</span>
                     <span style={{ fontWeight: 600 }}>{price.price}</span>
                   </div>
-                ))}
-              </div>
+              ))}
+            </div>
 
               <button 
                 onClick={() => handleOrderClick(service)}
@@ -298,8 +298,8 @@ function Copycenter() {
                   }
                 }}
               >
-                Заказать
-              </button>
+              Заказать
+            </button>
             </div>
           </div>
         ))}
