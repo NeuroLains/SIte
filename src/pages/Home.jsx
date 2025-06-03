@@ -109,10 +109,10 @@ function Home() {
         </div>
       </div>
       <div style={{ padding: '32px 0', textAlign: 'center' }}>
-        <h2 style={{ color: '#2196f3', margin: '32px 0 16px', fontWeight: 700, letterSpacing: 1 }}>Наша продукция</h2>
+        <h2 style={{ color: '#2196f3', margin: '32px 0 16px', fontWeight: 700, letterSpacing: 1 }}>Хиты продаж</h2>
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+          gridTemplateColumns: 'repeat(5, 1fr)',
           gap: '32px',
           margin: '40px 0',
           padding: '0 24px',
@@ -120,7 +120,7 @@ function Home() {
           marginLeft: 'auto',
           marginRight: 'auto'
         }}>
-          {services.map((service, idx) => (
+          {services.slice(0, 15).map((service, idx) => (
             <ProductCard
               key={idx}
               to={`/product/${idx}`}
@@ -131,6 +131,32 @@ function Home() {
               discount={service.discount}
             />
           ))}
+        </div>
+        {/* Блок преимуществ */}
+        <div className="section-lavender advantages-block">
+          <h2 className="advantages-title">ПОЧЕМУ ВЫБИРАЮТ НАС</h2>
+          <div className="advantages-grid">
+            <div className="advantage-item">
+              <div className="advantage-icon">💳</div>
+              <div className="advantage-label">Гибкая оплата</div>
+              <div className="advantage-desc">Карты, переводы, наличные</div>
+            </div>
+            <div className="advantage-item">
+              <div className="advantage-icon">⚡</div>
+              <div className="advantage-label">Скорость</div>
+              <div className="advantage-desc">Выполним срочно — от 1 дня</div>
+            </div>
+            <div className="advantage-item">
+              <div className="advantage-icon">🎨</div>
+              <div className="advantage-label">Дизайн</div>
+              <div className="advantage-desc">Поможем с макетом и идеей</div>
+            </div>
+            <div className="advantage-item">
+              <div className="advantage-icon">🏭</div>
+              <div className="advantage-label">Собственное производство</div>
+              <div className="advantage-desc">Контроль качества и сроков</div>
+            </div>
+          </div>
         </div>
         {/* Модальное окно услуги */}
         {modal && (
@@ -193,32 +219,6 @@ function Home() {
                 onClick={() => setGalleryIndex(idx)}
               />
             ))}
-          </div>
-        </div>
-      </div>
-      {/* Блок преимуществ */}
-      <div className="section-lavender advantages-block">
-        <h2 className="advantages-title">ПОЧЕМУ ВЫБИРАЮТ НАС</h2>
-        <div className="advantages-grid">
-          <div className="advantage-item">
-            <div className="advantage-icon">💳</div>
-            <div className="advantage-label">Гибкая оплата</div>
-            <div className="advantage-desc">Карты, переводы, наличные</div>
-          </div>
-          <div className="advantage-item">
-            <div className="advantage-icon">⚡</div>
-            <div className="advantage-label">Скорость</div>
-            <div className="advantage-desc">Выполним срочно — от 1 дня</div>
-          </div>
-          <div className="advantage-item">
-            <div className="advantage-icon">🎨</div>
-            <div className="advantage-label">Дизайн</div>
-            <div className="advantage-desc">Поможем с макетом и идеей</div>
-          </div>
-          <div className="advantage-item">
-            <div className="advantage-icon">🏭</div>
-            <div className="advantage-label">Собственное производство</div>
-            <div className="advantage-desc">Контроль качества и сроков</div>
           </div>
         </div>
       </div>

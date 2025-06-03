@@ -3,7 +3,8 @@ import logo from '../assets/kolibri-logo.png';
 import mailIcon from '../assets/icons/mail.svg';
 import phoneIcon from '../assets/icons/phone.svg';
 import whatsappIcon from '../assets/icons/whatsapp.svg';
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink, Link, useNavigate } from 'react-router-dom';
+import Fuse from 'fuse.js';
 // Можно добавить svg-иконки Telegram/WhatsApp
 
 function QuickOrderModal({ open, onClose }) {
@@ -70,9 +71,133 @@ function QuickOrderModal({ open, onClose }) {
   );
 }
 
+// Функция транслитерации (рус -> латиница)
+function translit(str) {
+  const ru = 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя';
+  const en = ['a','b','v','g','d','e','e','zh','z','i','y','k','l','m','n','o','p','r','s','t','u','f','h','ts','ch','sh','sch','','y','','e','yu','ya'];
+  return str.toLowerCase().split('').map(s => {
+    const i = ru.indexOf(s);
+    return i >= 0 ? en[i] : s;
+  }).join('');
+}
+// Функция для генерации опечаток (раскладка)
+function toEnLayout(str) {
+  const ru = 'ёйцукенгшщзхъфывапролджэячсмитьбю';
+  const en = '`qwertyuiop[]asdfghjkl;\zxcvbnm,.';
+  return str.split('').map(s => {
+    const i = ru.indexOf(s.toLowerCase());
+    if (i >= 0) return en[i];
+    return s;
+  }).join('');
+}
+function toRuLayout(str) {
+  const ru = 'ёйцукенгшщзхъфывапролджэячсмитьбю';
+  const en = '`qwertyuiop[]asdfghjkl;\zxcvbnm,.';
+  return str.split('').map(s => {
+    const i = en.indexOf(s.toLowerCase());
+    if (i >= 0) return ru[i];
+    return s;
+  }).join('');
+}
+
+const searchDataRaw = [
+  { title: 'Визитки', to: '/polygraphy/business-cards', keywords: ['визитка', 'визитки', 'визитная карточка', 'business card', 'карточка', 'визиточная', 'визиточная карточка'] },
+  { title: 'Листовки', to: '/polygraphy/flyers', keywords: ['листовка', 'листовки', 'flyer', 'лист', 'листовочка', 'флаер', 'флаеры'] },
+  { title: 'Буклеты', to: '/polygraphy/booklets', keywords: ['буклет', 'буклеты', 'booklet', 'каталог', 'каталоги', 'брошюра', 'брошюры'] },
+  { title: 'Блокноты', to: '/polygraphy/notebooks', keywords: ['блокнот', 'блокноты', 'notebook', 'тетрадь', 'тетради', 'записная книжка'] },
+  { title: 'Конверты', to: '/polygraphy/envelopes', keywords: ['конверт', 'конверты', 'envelope', 'почтовый конверт'] },
+  { title: 'Брошюры', to: '/polygraphy/brochures', keywords: ['брошюра', 'брошюры', 'brochure', 'каталог', 'каталоги', 'буклет', 'буклеты'] },
+  { title: 'Плакаты', to: '/polygraphy/posters', keywords: ['плакат', 'плакаты', 'poster', 'афиша', 'афиши'] },
+  { title: 'Чертежи', to: '/polygraphy/drawings', keywords: ['чертеж', 'чертежи', 'drawing', 'план', 'планы', 'схема', 'схемы'] },
+  { title: 'Печать Фото', to: '/polygraphy/photo-print', keywords: ['фото', 'печать фото', 'фотопечать', 'photoprint', 'фотография', 'фотографии', 'фотоснимок'] },
+  { title: 'Календари', to: '/polygraphy/calendars', keywords: ['календарь', 'календари', 'calendar', 'ежедневник', 'планер'] },
+  { title: 'Наклейки', to: '/polygraphy/stickers', keywords: ['наклейка', 'наклейки', 'sticker', 'стикер', 'стикеры', 'этикетка', 'этикетки'] },
+  { title: 'Стикеры', to: '/polygraphy/labels', keywords: ['стикер', 'стикеры', 'label', 'наклейка', 'наклейки', 'этикетка', 'этикетки'] },
+  { title: 'Пластиковые Карты', to: '/polygraphy/plastic-cards', keywords: ['пластиковая карта', 'пластиковые карты', 'plastic card', 'карта', 'карты', 'пропуск', 'пропуска'] },
+  { title: 'Ризография', to: '/polygraphy/risograph', keywords: ['ризография', 'risograph', 'оперативная печать', 'дупликатор'] },
+  { title: 'Бланки', to: '/polygraphy/forms', keywords: ['бланк', 'бланки', 'form', 'форма', 'формы', 'бланк строгой отчетности'] },
+  { title: 'Самокопирующиеся Бланки', to: '/polygraphy/carbonless-forms', keywords: ['самокопирующийся бланк', 'самокопирующиеся бланки', 'carbonless', 'копия', 'копии', 'самокопирка'] },
+  { title: 'Значки', to: '/souvenirs/badges', keywords: ['значок', 'значки', 'badge', 'сувенир', 'значёк', 'значки на заказ'] },
+  { title: '3Д Стикеры', to: '/souvenirs/3d-stickers', keywords: ['3d стикер', '3д стикеры', '3d sticker', 'трёхмерный стикер', 'объемный стикер'] },
+  { title: 'Шоколадки', to: '/souvenirs/chocolate', keywords: ['шоколадка', 'шоколадки', 'chocolate', 'сладости', 'сувенирный шоколад'] },
+  { title: 'Кружки', to: '/souvenirs/mugs', keywords: ['кружка', 'кружки', 'mug', 'чашка', 'чашки', 'сувенирная кружка'] },
+  { title: 'Футболки', to: '/souvenirs/tshirts', keywords: ['футболка', 'футболки', 'tshirt', 'печать на футболках', 'сублимация', 'одежда', 'сувенирная одежда'] },
+  { title: 'Бейсболки', to: '/souvenirs/caps', keywords: ['бейсболка', 'бейсболки', 'cap', 'кепка', 'кепки', 'головной убор'] },
+  { title: 'Магниты', to: '/souvenirs/magnets', keywords: ['магнит', 'магниты', 'magnet', 'сувенирный магнит', 'магнитик'] },
+  { title: 'Брелоки', to: '/souvenirs/keychains', keywords: ['брелок', 'брелоки', 'keychain', 'ключ', 'ключи', 'сувенирный брелок'] },
+  { title: 'Шильды', to: '/souvenirs/plates', keywords: ['шильд', 'шильды', 'plate', 'табличка', 'таблички', 'металлическая табличка'] },
+  { title: 'Печать на металле', to: '/souvenirs/metal-print', keywords: ['печать на металле', 'металл', 'metal print', 'сублимация', 'металлический', 'сувенир из металла'] },
+  { title: 'Сумки', to: '/souvenirs/bags', keywords: ['сумка', 'сумки', 'bag', 'шоппер', 'эко-сумка', 'сувенирная сумка'] },
+  { title: 'Рюкзаки', to: '/souvenirs/backpacks', keywords: ['рюкзак', 'рюкзаки', 'backpack', 'сумка', 'ранец', 'сувенирный рюкзак'] },
+  { title: 'Пазлы', to: '/souvenirs/puzzles', keywords: ['пазл', 'пазлы', 'puzzle', 'головоломка', 'сувенирный пазл'] },
+  { title: 'Коврики', to: '/souvenirs/mats', keywords: ['коврик', 'коврики', 'mat', 'ковер', 'ковры', 'коврик для мыши'] },
+  { title: 'Ленты', to: '/souvenirs/ribbons', keywords: ['лента', 'ленты', 'ribbon', 'ткань', 'тканевые ленты', 'сувенирная лента'] },
+  { title: 'Флаги', to: '/souvenirs/flags', keywords: ['флаг', 'флаги', 'flag', 'баннер', 'баннеры', 'сувенирный флаг'] },
+  { title: 'Баннеры', to: '/advert/banners', keywords: ['баннер', 'баннеры', 'banner', 'флаг', 'флаги', 'наружная реклама'] },
+  { title: 'Стенды', to: '/advert/stands', keywords: ['стенд', 'стенды', 'stand', 'выставка', 'выставочные стенды', 'рекламный стенд'] },
+  { title: 'Таблички', to: '/advert/plates', keywords: ['табличка', 'таблички', 'plate', 'шильд', 'шильды', 'информационная табличка'] },
+  { title: 'Roll UP', to: '/advert/rollup', keywords: ['roll up', 'ролл ап', 'мобильный стенд', 'rollup', 'роллап'] },
+  { title: 'Press Wall', to: '/advert/presswall', keywords: ['press wall', 'пресс волл', 'фотозона', 'presswall', 'прессволл'] },
+  { title: 'Х – образные стойки', to: '/advert/x-stands', keywords: ['х-стенд', 'х-образная стойка', 'x-stand', 'x-stands', 'стойка', 'рекламная стойка'] },
+  { title: 'Таблички для оплаты', to: '/advert/payment-plates', keywords: ['табличка для оплаты', 'оплата', 'plate', 'табличка оплаты'] },
+  { title: 'Адресные Таблички', to: '/advert/address-plates', keywords: ['адресная табличка', 'адресные таблички', 'address plate', 'табличка адрес'] },
+  { title: 'Плоттерная Резка', to: '/advert/plotter-cut', keywords: ['плоттерная резка', 'резка', 'plotter cut', 'плоттер', 'резка пленки'] },
+  { title: 'Разработка макетов', to: '/services/design', keywords: ['дизайн', 'макет', 'макеты', 'maket', 'design', 'макетирование', 'дизайн-проект'] },
+  { title: 'Ламинирование', to: '/services/lamination', keywords: ['ламинирование', 'lamination', 'пленка', 'защита', 'ламинировать'] },
+  { title: 'Брошюровка', to: '/services/binding', keywords: ['брошюровка', 'binding', 'скрепление', 'переплет', 'брошюровать'] },
+  { title: 'Степлирование', to: '/services/stapling', keywords: ['степлирование', 'stapling', 'скрепка', 'скрепить', 'степлер'] },
+  { title: 'Твердый Переплет', to: '/services/hardcover', keywords: ['твердый переплет', 'hardcover', 'книга', 'книги', 'жесткий переплет'] },
+  { title: 'Изготовление Печатей', to: '/services/stamps', keywords: ['печать', 'печати', 'stamp', 'штамп', 'штампы', 'изготовление штампов'] },
+  { title: 'Брендирование', to: '/services/branding', keywords: ['брендирование', 'branding', 'бренд', 'логотип', 'брендировать'] },
+];
+
+// Генерируем расширенный массив с транслитом и опечатками
+const searchData = searchDataRaw.map(item => {
+  const allKeywords = new Set(item.keywords);
+  item.keywords.forEach(word => {
+    allKeywords.add(translit(word));
+    allKeywords.add(toEnLayout(word));
+    allKeywords.add(toRuLayout(word));
+  });
+  // Добавим транслит и опечатки для title
+  allKeywords.add(translit(item.title));
+  allKeywords.add(toEnLayout(item.title));
+  allKeywords.add(toRuLayout(item.title));
+  return { ...item, keywords: Array.from(allKeywords) };
+});
+
+const fuse = new Fuse(searchData, {
+  keys: ['title', 'keywords'],
+  threshold: 0.38, // чувствительность: 0 — строгое совпадение, 1 — очень нестрогое
+  minMatchCharLength: 2,
+  includeScore: true,
+});
+
 export default function TopInfoBar() {
   const [modal, setModal] = useState(false);
   const [catalogOpen, setCatalogOpen] = useState(false);
+  const [search, setSearch] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [showResults, setShowResults] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (search.trim().length > 0) {
+      const fuseResults = fuse.search(search.trim());
+      const results = fuseResults.map(r => r.item);
+      setSearchResults(results);
+      setShowResults(true);
+    } else {
+      setShowResults(false);
+      setSearchResults([]);
+    }
+  }, [search]);
+
+  const handleResultClick = (to) => {
+    setShowResults(false);
+    setSearch('');
+    navigate(to);
+  };
 
   // Закрытие меню при клике вне
   useEffect(() => {
@@ -132,128 +257,143 @@ export default function TopInfoBar() {
                 {/* Полиграфия */}
                 <div className="catalog-menu-item">
                   <i className="fas fa-print"></i>
-                  <Link to="/polygraphy" style={{flex:1, textDecoration:'none', color:'inherit'}}>Полиграфия</Link>
+                  <Link to="/polygraphy" style={{flex:1, textDecoration:'none', color:'inherit'}} onClick={() => setCatalogOpen(false)}>Полиграфия</Link>
                   <span className="arrow-icon">›</span>
                   <div className="catalog-submenu">
-                    <div className="submenu-section">
-                      <Link to="/polygraphy/business-cards" className="submenu-title">Визитки</Link>
-                    </div>
-                    <div className="submenu-section">
-                      <Link to="/polygraphy/flyers" className="submenu-title">Листовки</Link>
-                    </div>
-                    <div className="submenu-section">
-                      <Link to="/polygraphy/booklets" className="submenu-title">Буклеты</Link>
-                    </div>
-                    <div className="submenu-section">
-                      <Link to="/polygraphy/notebooks" className="submenu-title">Блокноты</Link>
-                    </div>
-                    <div className="submenu-section">
-                      <Link to="/polygraphy/envelopes" className="submenu-title">Конверты</Link>
-                    </div>
-                    <div className="submenu-section">
-                      <Link to="/polygraphy/brochures" className="submenu-title">Брошюры</Link>
-                    </div>
-                    <div className="submenu-section">
-                      <Link to="/polygraphy/posters" className="submenu-title">Плакаты</Link>
-                    </div>
-                    <div className="submenu-section">
-                      <Link to="/polygraphy/drawings" className="submenu-title">Чертежи</Link>
-                    </div>
-                    <div className="submenu-section">
-                      <Link to="/polygraphy/photo-print" className="submenu-title">Печать Фото</Link>
-                    </div>
-                    <div className="submenu-section">
-                      <Link to="/polygraphy/calendars" className="submenu-title">Календари</Link>
-                    </div>
-                    <div className="submenu-section">
-                      <Link to="/polygraphy/stickers" className="submenu-title">Наклейки</Link>
-                    </div>
-                    <div className="submenu-section">
-                      <Link to="/polygraphy/labels" className="submenu-title">Стикеры</Link>
-                    </div>
-                    <div className="submenu-section">
-                      <Link to="/polygraphy/plastic-cards" className="submenu-title">Пластиковые Карты</Link>
-                    </div>
-                    <div className="submenu-section">
-                      <Link to="/polygraphy/risograph" className="submenu-title">Ризография</Link>
-                    </div>
-                    <div className="submenu-section">
-                      <Link to="/polygraphy/forms" className="submenu-title">Бланки</Link>
-                    </div>
-                    <div className="submenu-section">
-                      <Link to="/polygraphy/carbonless-forms" className="submenu-title">Самокопирующиеся Бланки</Link>
-                    </div>
+                    <ul className="submenu-list">
+                      <li><Link to="/polygraphy/business-cards" className="submenu-link" onClick={() => setCatalogOpen(false)}>Визитки</Link></li>
+                      <li><Link to="/polygraphy/flyers" className="submenu-link" onClick={() => setCatalogOpen(false)}>Листовки</Link></li>
+                      <li><Link to="/polygraphy/booklets" className="submenu-link" onClick={() => setCatalogOpen(false)}>Буклеты</Link></li>
+                      <li><Link to="/polygraphy/notebooks" className="submenu-link" onClick={() => setCatalogOpen(false)}>Блокноты</Link></li>
+                      <li><Link to="/polygraphy/envelopes" className="submenu-link" onClick={() => setCatalogOpen(false)}>Конверты</Link></li>
+                      <li><Link to="/polygraphy/brochures" className="submenu-link" onClick={() => setCatalogOpen(false)}>Брошюры</Link></li>
+                      <li><Link to="/polygraphy/posters" className="submenu-link" onClick={() => setCatalogOpen(false)}>Плакаты</Link></li>
+                      <li><Link to="/polygraphy/drawings" className="submenu-link" onClick={() => setCatalogOpen(false)}>Чертежи</Link></li>
+                      <li><Link to="/polygraphy/photo-print" className="submenu-link" onClick={() => setCatalogOpen(false)}>Печать Фото</Link></li>
+                      <li><Link to="/polygraphy/calendars" className="submenu-link" onClick={() => setCatalogOpen(false)}>Календари</Link></li>
+                      <li><Link to="/polygraphy/stickers" className="submenu-link" onClick={() => setCatalogOpen(false)}>Наклейки</Link></li>
+                      <li><Link to="/polygraphy/labels" className="submenu-link" onClick={() => setCatalogOpen(false)}>Стикеры</Link></li>
+                      <li><Link to="/polygraphy/plastic-cards" className="submenu-link" onClick={() => setCatalogOpen(false)}>Пластиковые Карты</Link></li>
+                      <li><Link to="/polygraphy/risograph" className="submenu-link" onClick={() => setCatalogOpen(false)}>Ризография</Link></li>
+                      <li><Link to="/polygraphy/forms" className="submenu-link" onClick={() => setCatalogOpen(false)}>Бланки</Link></li>
+                      <li><Link to="/polygraphy/carbonless-forms" className="submenu-link" onClick={() => setCatalogOpen(false)}>Самокопирующиеся Бланки</Link></li>
+                    </ul>
                   </div>
                 </div>
                 {/* Сувенирная продукция */}
                 <div className="catalog-menu-item">
                   <i className="fas fa-gift"></i>
-                  <Link to="/souvenirs" style={{flex:1, textDecoration:'none', color:'inherit'}}>Сувенирная продукция</Link>
+                  <Link to="/souvenirs" style={{flex:1, textDecoration:'none', color:'inherit'}} onClick={() => setCatalogOpen(false)}>Сувенирная продукция</Link>
                   <span className="arrow-icon">›</span>
                   <div className="catalog-submenu">
-                    <div className="submenu-section"><Link to="/souvenirs/badges" className="submenu-title">Значки</Link></div>
-                    <div className="submenu-section"><Link to="/souvenirs/3d-stickers" className="submenu-title">3Д Стикеры</Link></div>
-                    <div className="submenu-section"><Link to="/souvenirs/chocolate" className="submenu-title">Шоколадки</Link></div>
-                    <div className="submenu-section"><Link to="/souvenirs/mugs" className="submenu-title">Кружки</Link></div>
-                    <div className="submenu-section"><Link to="/souvenirs/tshirts" className="submenu-title">Футболки</Link></div>
-                    <div className="submenu-section"><Link to="/souvenirs/caps" className="submenu-title">Бейсболки</Link></div>
-                    <div className="submenu-section"><Link to="/souvenirs/magnets" className="submenu-title">Магниты</Link></div>
-                    <div className="submenu-section"><Link to="/souvenirs/keychains" className="submenu-title">Брелоки</Link></div>
-                    <div className="submenu-section"><Link to="/souvenirs/plates" className="submenu-title">Шильды</Link></div>
-                    <div className="submenu-section"><Link to="/souvenirs/metal-print" className="submenu-title">Печать на металле</Link></div>
-                    <div className="submenu-section"><Link to="/souvenirs/bags" className="submenu-title">Сумки</Link></div>
-                    <div className="submenu-section"><Link to="/souvenirs/backpacks" className="submenu-title">Рюкзаки</Link></div>
-                    <div className="submenu-section"><Link to="/souvenirs/puzzles" className="submenu-title">Пазлы</Link></div>
-                    <div className="submenu-section"><Link to="/souvenirs/mats" className="submenu-title">Коврики</Link></div>
-                    <div className="submenu-section"><Link to="/souvenirs/ribbons" className="submenu-title">Ленты</Link></div>
-                    <div className="submenu-section"><Link to="/souvenirs/flags" className="submenu-title">Флаги</Link></div>
+                    <ul className="submenu-list">
+                      <li><Link to="/souvenirs/badges" className="submenu-link" onClick={() => setCatalogOpen(false)}>Значки</Link></li>
+                      <li><Link to="/souvenirs/3d-stickers" className="submenu-link" onClick={() => setCatalogOpen(false)}>3Д Стикеры</Link></li>
+                      <li><Link to="/souvenirs/chocolate" className="submenu-link" onClick={() => setCatalogOpen(false)}>Шоколадки</Link></li>
+                      <li><Link to="/souvenirs/mugs" className="submenu-link" onClick={() => setCatalogOpen(false)}>Кружки</Link></li>
+                      <li><Link to="/souvenirs/tshirts" className="submenu-link" onClick={() => setCatalogOpen(false)}>Футболки</Link></li>
+                      <li><Link to="/souvenirs/caps" className="submenu-link" onClick={() => setCatalogOpen(false)}>Бейсболки</Link></li>
+                      <li><Link to="/souvenirs/magnets" className="submenu-link" onClick={() => setCatalogOpen(false)}>Магниты</Link></li>
+                      <li><Link to="/souvenirs/keychains" className="submenu-link" onClick={() => setCatalogOpen(false)}>Брелоки</Link></li>
+                      <li><Link to="/souvenirs/plates" className="submenu-link" onClick={() => setCatalogOpen(false)}>Шильды</Link></li>
+                      <li><Link to="/souvenirs/metal-print" className="submenu-link" onClick={() => setCatalogOpen(false)}>Печать на металле</Link></li>
+                      <li><Link to="/souvenirs/bags" className="submenu-link" onClick={() => setCatalogOpen(false)}>Сумки</Link></li>
+                      <li><Link to="/souvenirs/backpacks" className="submenu-link" onClick={() => setCatalogOpen(false)}>Рюкзаки</Link></li>
+                      <li><Link to="/souvenirs/puzzles" className="submenu-link" onClick={() => setCatalogOpen(false)}>Пазлы</Link></li>
+                      <li><Link to="/souvenirs/mats" className="submenu-link" onClick={() => setCatalogOpen(false)}>Коврики</Link></li>
+                      <li><Link to="/souvenirs/ribbons" className="submenu-link" onClick={() => setCatalogOpen(false)}>Ленты</Link></li>
+                      <li><Link to="/souvenirs/flags" className="submenu-link" onClick={() => setCatalogOpen(false)}>Флаги</Link></li>
+                    </ul>
                   </div>
                 </div>
                 {/* Рекламные конструкции */}
                 <div className="catalog-menu-item">
                   <i className="fas fa-building"></i>
-                  <Link to="/advert" style={{flex:1, textDecoration:'none', color:'inherit'}}>Рекламные конструкции</Link>
+                  <Link to="/advert" style={{flex:1, textDecoration:'none', color:'inherit'}} onClick={() => setCatalogOpen(false)}>Рекламные конструкции</Link>
                   <span className="arrow-icon">›</span>
                   <div className="catalog-submenu">
-                    <div className="submenu-section"><Link to="/advert/banners" className="submenu-title">Баннеры</Link></div>
-                    <div className="submenu-section"><Link to="/advert/stands" className="submenu-title">Стенды</Link></div>
-                    <div className="submenu-section"><Link to="/advert/plates" className="submenu-title">Таблички</Link></div>
-                    <div className="submenu-section"><Link to="/advert/rollup" className="submenu-title">Roll UP</Link></div>
-                    <div className="submenu-section"><Link to="/advert/presswall" className="submenu-title">Press Wall</Link></div>
-                    <div className="submenu-section"><Link to="/advert/x-stands" className="submenu-title">Х – образные стойки</Link></div>
-                    <div className="submenu-section"><Link to="/advert/payment-plates" className="submenu-title">Таблички для оплаты</Link></div>
-                    <div className="submenu-section"><Link to="/advert/address-plates" className="submenu-title">Адресные Таблички</Link></div>
-                    <div className="submenu-section"><Link to="/advert/plotter-cut" className="submenu-title">Плоттерная Резка</Link></div>
+                    <ul className="submenu-list">
+                      <li><Link to="/advert/banners" className="submenu-link" onClick={() => setCatalogOpen(false)}>Баннеры</Link></li>
+                      <li><Link to="/advert/stands" className="submenu-link" onClick={() => setCatalogOpen(false)}>Стенды</Link></li>
+                      <li><Link to="/advert/plates" className="submenu-link" onClick={() => setCatalogOpen(false)}>Таблички</Link></li>
+                      <li><Link to="/advert/rollup" className="submenu-link" onClick={() => setCatalogOpen(false)}>Roll UP</Link></li>
+                      <li><Link to="/advert/presswall" className="submenu-link" onClick={() => setCatalogOpen(false)}>Press Wall</Link></li>
+                      <li><Link to="/advert/x-stands" className="submenu-link" onClick={() => setCatalogOpen(false)}>Х – образные стойки</Link></li>
+                      <li><Link to="/advert/payment-plates" className="submenu-link" onClick={() => setCatalogOpen(false)}>Таблички для оплаты</Link></li>
+                      <li><Link to="/advert/address-plates" className="submenu-link" onClick={() => setCatalogOpen(false)}>Адресные Таблички</Link></li>
+                      <li><Link to="/advert/plotter-cut" className="submenu-link" onClick={() => setCatalogOpen(false)}>Плоттерная Резка</Link></li>
+                    </ul>
                   </div>
                 </div>
                 {/* Услуги */}
                 <div className="catalog-menu-item">
                   <i className="fas fa-tools"></i>
-                  <Link to="/services" style={{flex:1, textDecoration:'none', color:'inherit'}}>Услуги</Link>
+                  <Link to="/services" style={{flex:1, textDecoration:'none', color:'inherit'}} onClick={() => setCatalogOpen(false)}>Услуги</Link>
                   <span className="arrow-icon">›</span>
                   <div className="catalog-submenu">
-                    <div className="submenu-section"><Link to="/services/design" className="submenu-title">Разработка макетов</Link></div>
-                    <div className="submenu-section"><Link to="/services/lamination" className="submenu-title">Ламинирование</Link></div>
-                    <div className="submenu-section"><Link to="/services/binding" className="submenu-title">Брошюровка</Link></div>
-                    <div className="submenu-section"><Link to="/services/stapling" className="submenu-title">Степлирование</Link></div>
-                    <div className="submenu-section"><Link to="/services/hardcover" className="submenu-title">Твердый Переплет</Link></div>
-                    <div className="submenu-section"><Link to="/services/stamps" className="submenu-title">Изготовление Печатей</Link></div>
-                    <div className="submenu-section"><Link to="/services/branding" className="submenu-title">Брендирование</Link></div>
+                    <ul className="submenu-list">
+                      <li><Link to="/services/design" className="submenu-link" onClick={() => setCatalogOpen(false)}>Разработка макетов</Link></li>
+                      <li><Link to="/services/lamination" className="submenu-link" onClick={() => setCatalogOpen(false)}>Ламинирование</Link></li>
+                      <li><Link to="/services/binding" className="submenu-link" onClick={() => setCatalogOpen(false)}>Брошюровка</Link></li>
+                      <li><Link to="/services/stapling" className="submenu-link" onClick={() => setCatalogOpen(false)}>Степлирование</Link></li>
+                      <li><Link to="/services/hardcover" className="submenu-link" onClick={() => setCatalogOpen(false)}>Твердый Переплет</Link></li>
+                      <li><Link to="/services/stamps" className="submenu-link" onClick={() => setCatalogOpen(false)}>Изготовление Печатей</Link></li>
+                      <li><Link to="/services/branding" className="submenu-link" onClick={() => setCatalogOpen(false)}>Брендирование</Link></li>
+                    </ul>
                   </div>
                 </div>
                 {/* Контакты */}
                 <div className="catalog-menu-item">
                   <i className="fas fa-address-book"></i>
-                  <Link to="/contacts" style={{flex:1, textDecoration:'none', color:'inherit'}}>Контакты</Link>
+                  <Link to="/contacts" style={{flex:1, textDecoration:'none', color:'inherit'}} onClick={() => setCatalogOpen(false)}>Контакты</Link>
                 </div>
               </div>
             )}
           </div>
           <form style={{flex:1, minWidth:0, position:'relative', display:'flex', alignItems:'center'}} onSubmit={e=>e.preventDefault()}>
-            <input type="text" placeholder="Поиск по сайту…" style={{width:'100%', padding:'12px 48px 12px 20px', borderRadius: 24, border:'none', outline:'none', fontSize:17, background:'#fff', color:'#222', boxShadow:'0 2px 8px #0002'}} />
+            <input
+              type="text"
+              placeholder="Поиск по сайту…"
+              style={{width:'100%', padding:'12px 48px 12px 20px', borderRadius: 24, border:'none', outline:'none', fontSize:17, background:'#fff', color:'#222', boxShadow:'0 2px 8px #0002'}}
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              onFocus={() => search && setShowResults(true)}
+              autoComplete="off"
+            />
             <span style={{position:'absolute', right:18, top:'50%', transform:'translateY(-50%)', color:'#888', fontSize:22, pointerEvents:'none'}}>
               <svg width="22" height="22" fill="none" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" stroke="#888" strokeWidth="2"/><path d="M20 20L17 17" stroke="#888" strokeWidth="2" strokeLinecap="round"/></svg>
             </span>
+            {showResults && (
+              <div style={{
+                position: 'absolute',
+                top: '110%',
+                left: 0,
+                right: 0,
+                background: '#fff',
+                borderRadius: 12,
+                boxShadow: '0 4px 24px rgba(0,0,0,0.15)',
+                zIndex: 2000,
+                padding: '8px 0',
+                maxHeight: 320,
+                overflowY: 'auto',
+                border: '1px solid #e0e0e0',
+                marginTop: 4
+              }}>
+                {searchResults.length === 0 ? (
+                  <div style={{padding: '12px 24px', color: '#888', fontSize: 16}}>Ничего не найдено</div>
+                ) : (
+                  searchResults.map((item, idx) => (
+                    <div
+                      key={idx}
+                      style={{padding: '12px 24px', cursor: 'pointer', fontSize: 16, color: '#1976d2'}}
+                      onMouseDown={() => handleResultClick(item.to)}
+                    >
+                      {item.title}
+                    </div>
+                  ))
+                )}
+              </div>
+            )}
           </form>
         </div>
         {/* Контакты, соцсети, кнопка */}
