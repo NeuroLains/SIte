@@ -22,10 +22,20 @@ import slider3 from '../assets/gallery/3.jpg';
 import slider4 from '../assets/gallery/4.jpg';
 
 // Импортируем изображения для галереи работ
-import work1 from '../assets/gallery/photo1.jpg';
-import work2 from '../assets/gallery/photo2.jpg';
-import work3 from '../assets/gallery/photo3.jpg';
-import work4 from '../assets/gallery/komissia1.jpg';
+import work1 from '../assets/gallery/1.jpg';
+import work2 from '../assets/gallery/2.jpg';
+import work3 from '../assets/gallery/3.jpg';
+import work4 from '../assets/gallery/4.jpg';
+import work5 from '../assets/gallery/5.jpg';
+import work6 from '../assets/gallery/6.jpg';
+import work7 from '../assets/gallery/7.jpg';
+import work8 from '../assets/gallery/8.jpg';
+import work9 from '../assets/gallery/9.jpg';
+import work10 from '../assets/gallery/10.jpg';
+import work11 from '../assets/gallery/11.jpg';
+import work12 from '../assets/gallery/12.jpg';
+import work13 from '../assets/gallery/13.jpg';
+import work14 from '../assets/gallery/14.jpg';
 
 import photo1 from '../assets/gallery/photo1.jpg';
 import photo2 from '../assets/gallery/photo2.jpg';
@@ -50,49 +60,46 @@ const services = [
 ];
 
 const sliderContent = [
-  {
-    title: 'КАЛЕНДАРЬ\nТРЕХБЛОЧНЫЙ\nНАСТЕННЫЙ',
-    price: 'от 32.2 ₽ за шт.',
-    image: slider1
-  },
-  {
-    title: 'ПЕЧАТЬ НА\nФУТБОЛКАХ',
-    price: 'от 200 ₽ за шт.',
-    image: slider2
-  },
-  {
-    title: 'ЗАКАТНЫЕ\nЗНАЧКИ',
-    price: 'от 25 ₽ за шт.',
-    image: slider3
-  },
-  {
-    title: 'ПОЛИГРАФИЯ\nЛЮБОЙ СЛОЖНОСТИ',
-    price: 'от 0.95 ₽ за шт.',
-    image: slider4
-  }
+  { image: slider1, title: 'Печать визиток', price: 'от 95 ₽ за 100 шт.' },
+  { image: slider2, title: 'Печать листовок', price: 'от 220 ₽ за 100 шт.' },
+  { image: slider3, title: 'Печать буклетов', price: 'от 410 ₽ за 100 шт.' },
+  { image: slider4, title: 'Печать плакатов', price: 'от 78 ₽ за 10 шт.' }
 ];
 
-const galleryImages = [work1, work2, work3, work4];
+const galleryImages = [
+  work1, work2, work3, work4, work5, work6, work7, work8, work9, work10, work11, work12, work13, work14
+];
 
-function Home() {
+export default function Home() {
   // --- Автослайдер ---
   const [autoIndex, setAutoIndex] = useState(0);
+
   useEffect(() => {
     const timer = setInterval(() => {
       setAutoIndex((prev) => (prev + 1) % sliderContent.length);
     }, 5000);
+
     return () => clearInterval(timer);
   }, []);
 
   // --- Примеры работ ---
   const [galleryIndex, setGalleryIndex] = useState(0);
-  const visibleCount = 3;
-  const [modal, setModal] = useState(null); // {title, price, icon, desc}
+  const [selectedImage, setSelectedImage] = useState(null);
+  const visibleCount = 4;
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setGalleryIndex((prev) => (prev + 1) % galleryImages.length);
+    }, 5000);
+
+    return () => clearInterval(timer);
+  }, []);
+
   const showPrev = () => setGalleryIndex((i) => (i === 0 ? galleryImages.length - 1 : i - 1));
   const showNext = () => setGalleryIndex((i) => (i + 1) % galleryImages.length);
   const getVisibleImages = () => {
-    return Array.from({ length: visibleCount }, (_, idx) =>
-      galleryImages[(galleryIndex + idx) % galleryImages.length]
+    return Array.from({ length: visibleCount }, (_, i) =>
+      galleryImages[(galleryIndex + i) % galleryImages.length]
     );
   };
 
@@ -120,7 +127,7 @@ function Home() {
           marginLeft: 'auto',
           marginRight: 'auto'
         }}>
-          {services.slice(0, 15).map((service, idx) => (
+          {services.slice(0, 10).map((service, idx) => (
             <ProductCard
               key={idx}
               to={`/product/${idx}`}
@@ -132,104 +139,130 @@ function Home() {
             />
           ))}
         </div>
-        {/* Блок преимуществ */}
-        <div className="section-lavender advantages-block">
-          <h2 className="advantages-title">ПОЧЕМУ ВЫБИРАЮТ НАС</h2>
-          <div className="advantages-grid">
-            <div className="advantage-item">
-              <div className="advantage-icon">💳</div>
-              <div className="advantage-label">Гибкая оплата</div>
-              <div className="advantage-desc">Карты, переводы, наличные</div>
+        {/* Примеры наших работ */}
+        <div className="section-yellow">
+          <div className="gallery-section">
+            <div className="gallery-title" style={{ color: '#2196f3', fontWeight: 700, letterSpacing: 1, marginBottom: 28 }}>Наши работы</div>
+            <div className="gallery-slider" style={{ 
+              display: 'flex', 
+              gap: '16px', 
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '400px',
+              position: 'relative',
+              padding: '20px 0',
+              overflow: 'hidden'
+            }}>
+              <span className="gallery-arrow" onClick={showPrev} style={{ 
+                cursor: 'pointer', 
+                fontSize: '32px', 
+                padding: '8px', 
+                color: '#2196f3',
+                zIndex: 2,
+                background: 'rgba(255,255,255,0.8)',
+                borderRadius: '50%',
+                width: '40px',
+                height: '40px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+              }}>&lt;</span>
+              {getVisibleImages().map((img, idx) => (
+                <img
+                  key={idx}
+                  src={img}
+                  alt={`Пример работы ${idx + 1}`}
+                  className="gallery-img"
+                  style={{
+                    height: '360px',
+                    width: 'auto',
+                    objectFit: 'cover',
+                    borderRadius: '8px',
+                    cursor: 'pointer',
+                    transition: 'opacity 0.5s, transform 0.5s',
+                    boxShadow: '0 4px 16px rgba(0,0,0,0.15)',
+                    flex: '0 0 360px',
+                    marginRight: '16px',
+                    opacity: 1,
+                    transform: 'scale(1)'
+                  }}
+                  onClick={() => setSelectedImage(img)}
+                />
+              ))}
+              <span className="gallery-arrow" onClick={showNext} style={{ 
+                cursor: 'pointer', 
+                fontSize: '32px', 
+                padding: '8px', 
+                color: '#2196f3',
+                zIndex: 2,
+                background: 'rgba(255,255,255,0.8)',
+                borderRadius: '50%',
+                width: '40px',
+                height: '40px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+              }}>&gt;</span>
             </div>
-            <div className="advantage-item">
-              <div className="advantage-icon">⚡</div>
-              <div className="advantage-label">Скорость</div>
-              <div className="advantage-desc">Выполним срочно — от 1 дня</div>
-            </div>
-            <div className="advantage-item">
-              <div className="advantage-icon">🎨</div>
-              <div className="advantage-label">Дизайн</div>
-              <div className="advantage-desc">Поможем с макетом и идеей</div>
-            </div>
-            <div className="advantage-item">
-              <div className="advantage-icon">🏭</div>
-              <div className="advantage-label">Собственное производство</div>
-              <div className="advantage-desc">Контроль качества и сроков</div>
+            <div className="gallery-dots" style={{ 
+              display: 'flex', 
+              justifyContent: 'center', 
+              gap: '8px', 
+              marginTop: '16px' 
+            }}>
+              {galleryImages.map((_, idx) => (
+                <span
+                  key={idx}
+                  className={"gallery-dot" + (galleryIndex === idx ? " active" : "")}
+                  onClick={() => setGalleryIndex(idx)}
+                  style={{
+                    width: '10px',
+                    height: '10px',
+                    borderRadius: '50%',
+                    backgroundColor: galleryIndex === idx ? '#2196f3' : '#ccc',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                    transform: galleryIndex === idx ? 'scale(1.2)' : 'scale(1)'
+                  }}
+                />
+              ))}
             </div>
           </div>
         </div>
-        {/* Модальное окно услуги */}
-        {modal && (
-          <div className="modal-overlay" onClick={() => setModal(null)}>
-            <div className="modal-window" onClick={e => e.stopPropagation()}>
-              <button className="modal-close" onClick={() => setModal(null)}>&times;</button>
-              <img src={modal.icon} alt={modal.title} className="modal-img" />
-              <div className="modal-title">{modal.title}</div>
-              <div className="modal-price">{modal.price}</div>
-              <div className="modal-desc">{modal.desc}</div>
-              {modal.title === 'Визитки' && (
-                <>
-                  <ul style={{margin:'16px 0 12px 0', color:'#1976d2', fontSize:'1.05rem', textAlign:'left', maxWidth:400, marginLeft:'auto', marginRight:'auto'}}>
-                    <li>Печать от 100 шт. за 1 день</li>
-                    <li>Плотная бумага 300-350 г/м²</li>
-                    <li>Ламинация, тиснение, фигурная вырубка</li>
-                    <li>Дизайн под ваш бренд</li>
-                  </ul>
-                  <div style={{background:'#e8fbe9', borderRadius:10, padding:'10px 18px', margin:'12px 0', color:'#388e3c', fontWeight:600, fontSize:'1.08rem'}}>
-                    <div>Цены:</div>
-                    <div>100 шт — <b>950 ₽</b></div>
-                    <div>500 шт — <b>3900 ₽</b></div>
-                    <div>1000 шт — <b>6900 ₽</b></div>
-                  </div>
-                  <div style={{margin:'12px 0'}}>
-                    <img src={modal.icon} alt="Пример визитки" style={{width:120, borderRadius:10, boxShadow:'0 2px 8px #b39ddb33'}} />
-                  </div>
-                  <button className="main-btn" style={{marginTop:8, minWidth:160}} onClick={()=>window.location.href='/contacts'}>Заказать визитки</button>
-                </>
-              )}
-              {modal.title !== 'Визитки' && (
-                <button className="main-btn" onClick={() => window.location.href = `/product/${services.findIndex(s=>s.title===modal.title)}`}>Подробнее</button>
-              )}
-            </div>
-          </div>
-        )}
       </div>
-      {/* Примеры наших работ */}
-      <div className="section-yellow">
-        <div className="gallery-section">
-          <div className="gallery-title" style={{ color: '#2196f3', fontWeight: 700, letterSpacing: 1, marginBottom: 28 }}>ПРИМЕРЫ НАШИХ РАБОТ</div>
-          <div className="gallery-slider" style={{ gap: 12 }}>
-            <span className="gallery-arrow" onClick={showPrev}>&lt;</span>
-            {getVisibleImages().map((img, idx) => (
-              <img
-                key={idx}
-                src={img}
-                alt={`Пример работы ${galleryIndex + idx + 1}`}
-                className="gallery-img"
-                style={{ margin: '0 8px', transition: 'box-shadow 0.3s, transform 0.3s' }}
-              />
-            ))}
-            <span className="gallery-arrow" onClick={showNext}>&gt;</span>
-          </div>
-          <div className="gallery-dots">
-            {galleryImages.map((_, idx) => (
-              <span
-                key={idx}
-                className={"gallery-dot" + (galleryIndex === idx ? " active" : "")}
-                onClick={() => setGalleryIndex(idx)}
-              />
-            ))}
-          </div>
+
+      {/* Модальное окно для просмотра изображения */}
+      {selectedImage && (
+        <div 
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0,0,0,0.8)',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            zIndex: 1000,
+            cursor: 'pointer'
+          }}
+          onClick={() => setSelectedImage(null)}
+        >
+          <img 
+            src={selectedImage} 
+            alt="Увеличенное изображение" 
+            style={{
+              maxWidth: '90%',
+              maxHeight: '90%',
+              objectFit: 'contain',
+              borderRadius: '8px'
+            }}
+          />
         </div>
-      </div>
-      <div className="section-green">
-        <div style={{maxWidth: 800, margin: '0 auto', textAlign: 'center', fontSize: '1.15rem', color: '#1976d2', fontWeight: 500, lineHeight: 1.7}}>
-          <h2 style={{color:'#43d854', fontWeight:700, marginBottom:16}}>Типография «Колибрия»</h2>
-          <p>Печать любой сложности в Нижнем Новгороде. Качество, скорость, индивидуальный подход. Мы предлагаем широкий спектр полиграфических и сувенирных услуг для бизнеса и частных клиентов. Современное оборудование, опытная команда, гибкие цены и внимательное отношение к каждому заказу!</p>
-        </div>
-      </div>
+      )}
     </>
   );
-}
-
-export default Home; 
+} 
